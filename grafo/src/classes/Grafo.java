@@ -63,6 +63,85 @@ public class Grafo {
         return objAresta;
     }
 
+    public int[][] matriz() {
+        int[][] m = new int[getOrdem()][getOrdem()];
+        for (Vertice v : vertices) {
+            for (Vertice w : vertices) {
+                if (v == w) {
+                    m[v.getId()][w.getId()] = 0;
+                }
+                else if (v.getArestas().containsKey(w)) {
+                    m[v.getId()][w.getId()] = v.getArestas().get(w).getCusto();
+                } else {
+                    m[v.getId()][w.getId()] = Integer.MAX_VALUE;
+                }
+            }
+        }
+        return m;
+    }
+
+    public void prim(Vertice r) {
+        ArrayList<Vertice> arvore = new ArrayList<>();
+        int[][] valores = matriz();
+        for (Vertice v : vertices) {
+            v.setP(null);
+            v.setChave(Integer.MAX_VALUE);
+        }
+        r.setChave(0);
+        ArrayList<Vertice> q = vertices;
+        while (!q.isEmpty()) {
+            Vertice u = removeMin(q);
+            arvore.add(u);
+            for (Vertice v : adj(u)) {
+                if (q.contains(v) && valores[u.getId()][v.getId()] < v.getChave()) {
+                    v.setP(u);
+                    v.setChave(valores[u.getId()][v.getId()]);
+                }
+            }
+        }
+        for (Vertice v : arvore) {
+            System.out.println(v.getId());
+        }
+    }
+
+    public void djikstra(Vertice i) {
+        int valor = 0;
+        int[][] matriz = matriz();
+        for (Vertice v : vertices) {
+            v.setChave(Integer.MAX_VALUE);
+            v.setP(null);
+        }
+        i.setChave(0);
+        ArrayList<Vertice> s = new ArrayList<>();
+        ArrayList<Vertice> q = vertices;
+        while (!q.isEmpty()) {
+            Vertice u = removeMin(q);
+            s.add(u);
+            for (Vertice v : adj(u)) {
+                if (q.contains(v) && v.getChave() > (u.getChave() + matriz[u.getId()][v.getId()])) {
+                    v.setChave(u.getChave() + matriz[u.getId()][v.getId()]);
+                    v.setP(u);
+                }
+            }
+        }
+        for (Vertice v : s) {
+            System.out.println(v.getId());
+        }
+    }
+
+    private Vertice removeMin(ArrayList<Vertice> vertices) {
+        int c = Integer.MAX_VALUE;
+        Vertice min = null;
+        for (Vertice v : vertices) {
+            if (v.getChave() < c) {
+                c = v.getChave();
+                min = v;
+            }
+        }
+        vertices.remove(min);
+        return min;
+    }
+
     public void insereV() {
 
         Vertice v = new Vertice(contIdV);
@@ -79,8 +158,8 @@ public class Grafo {
         vertices.remove(v);
     }
 
-    public void insereA (Vertice u, Vertice v) {
-        Aresta aresta = new Aresta(contIdA, u, v);
+    public void insereA (Vertice u, Vertice v, int valor) {
+        Aresta aresta = new Aresta(contIdA, u, v, valor);
         contIdA++;
         u.getArestas().put(v, aresta);
         v.getArestas().put(u, aresta);

@@ -12,29 +12,32 @@ public class Main {
         g.insereV();
         g.insereV();
         g.insereV();
+        g.insereV();
 
         ArrayList<Vertice> v = g.vertices();
 
-        g.insereA(v.get(0), v.get(1));
-        g.insereA(v.get(0), v.get(2));
-        g.insereA(v.get(1), v.get(2));
-        g.insereA(v.get(0), v.get(3));
+        g.insereA(v.get(0), v.get(1), 5);
+        g.insereA(v.get(0), v.get(4), 1);
+        g.insereA(v.get(1), v.get(4), 3);
+        g.insereA(v.get(1), v.get(2), 3);
+        g.insereA(v.get(2), v.get(3), 2);
+        g.insereA(v.get(3), v.get(4), 4);
 
-        System.out.println(g);
+        g.prim(v.get(0));
 
-        g.printBuscaLargura(g, v.get(0));
+        Grafo h = new Grafo();
+        h.insereV();
+        h.insereV();
+        h.insereV();
+
+        ArrayList<Vertice> u = h.vertices();
+
+        h.insereA(u.get(0), u.get(1), 5);
+        h.insereA(u.get(0), u.get(2), 2);
+        h.insereA(u.get(1), u.get(2), 1);
+
         System.out.println("");
-        g.buscaProfundidade(g, v.get(0));
-        System.out.println("");
-
-        g.imprimeCaminho(g, v.get(0), v.get(1));
-        System.out.println("");
-
-        if (g.fortementeConexo(g)) {
-            System.out.println("Fortemente conexo");
-        } else {
-            System.out.println("Não é fortemente conexo");
-        }
+        h.djikstra(u.get(0));
 
 
 

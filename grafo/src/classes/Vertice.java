@@ -14,6 +14,7 @@ public class Vertice {
     private int estado;
     private int d;
 
+    private int chave;
     private int ta;
     private int te;
     private Vertice p;
@@ -81,5 +82,13 @@ public class Vertice {
 
     public void setTe(int te) {
         this.te = te;
+    }
+
+    public int getChave() {
+        return chave;
+    }
+
+    public void setChave(int chave) {
+        this.chave = chave;
     }
 }
